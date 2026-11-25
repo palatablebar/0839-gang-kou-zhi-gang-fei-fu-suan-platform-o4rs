@@ -1,0 +1,22 @@
+.appt-nav { display: flex; flex-direction: column; gap: 4px; }
+.appt-nav a { padding: .55em .7em; text-decoration: none; color: var(--ink); border-left: 3px solid transparent; }
+.appt-nav a[aria-current="page"] { background: var(--soft); border-left-color: var(--accent); font-weight: 700; }
+.appt-main { display: grid; gap: var(--gap); }
+.json-input { width: 100%; min-height: 170px; resize: vertical; font-family: var(--font-num); font-size: 12px; line-height: 1.45; }
+.review-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.appt-table-wrap { max-height: 520px; }
+.capacity-actions { display: inline-flex; gap: 6px; align-items: center; }
+.capacity-actions button { padding: .15em .55em; min-width: 2em; }
+.capacity-actions .cap-value { font-family: var(--font-num); min-width: 2.5em; text-align: center; }
+.status-pill { display: inline-block; padding: .12em .55em; border: 1px solid var(--line); font-size: 12px; white-space: nowrap; }
+.status-pill[data-status="SENT"], .status-pill[data-status="CONFIRMED"] { background: var(--accent); color: var(--surface); border-color: var(--accent); }
+.status-pill[data-status="ISSUE_FAILED"] { color: var(--danger); border-color: var(--danger); }
+.status-pill[data-status="WAITING"] { color: var(--muted); }
+.vessel-yes { color: var(--accent); font-weight: 700; }
+.vessel-no { color: var(--muted); }
+.row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.row-actions button { padding: .25em .6em; font-size: 12px; }
+.appt-rules p { margin: 0 0 8px; color: var(--muted); }
+.simulate { display: flex; gap: 8px; align-items: center; font-size: 13px; }
+.fee-negative { color: var(--accent); }
+.fee-positive { color: var(--ink); }

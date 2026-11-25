@@ -23,5 +23,6 @@ docker compose config --quiet
 2. 选择 `dirty` 样例观察坏行和隔离原因。
 3. 换 `clean` 样例执行批次，填写复核意见后签发。
 4. 下载证据 JSON，核对来源摘要、指标和签发版本。
+5. 打开[提箱预约排程](/appointments)，按接驳船期、排箱数和新增滞港费优化闸口名额；规则见 `docs/APPOINTMENTS.md`。
 
 业务规则见 `docs/BUSINESS-RULES.md`，字段定义见 `docs/DATA-DICTIONARY.md`。

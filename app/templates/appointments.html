@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>提箱预约排程 · 港口滞港费复算台</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='layout.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='appointments.css') }}">
+</head>
+<body class="p0839 layout-split appointment-page">
+<div class="shell">
+  <nav class="rail" aria-label="预约导航">
+    <a class="brand" href="/" aria-label="返回复算工作台">港费</a>
+    <p class="rail-label">提箱预约</p>
+    <div id="appt-nav" class="appt-nav">
+      <a href="/">滞港复算</a>
+      <a href="/appointments" aria-current="page">预约排程</a>
+    </div>
+    <p class="rail-note">阶梯费率 · 剩余名额</p>
+  </nav>
+  <div class="work">
+    <header class="toolbar">
+      <div>
+        <p class="actor">港口箱管结算员 / 调度</p>
+        <h1>提箱预约排程</h1>
+      </div>
+      <div class="tools">
+        <span class="rule-chip">保接驳 → 多排箱 → 低新增费</span>
+        <button id="load-sample" type="button">载入示例并重排</button>
+        <button id="replan" type="button">按名额重排未确认</button>
+      </div>
+    </header>
+
+    <main class="appt-main">
+      <section class="kpis" aria-label="排程指标">
+        <article class="metric"><span>已排提箱</span><strong id="kpi-scheduled">--</strong></article>
+        <article class="metric"><span>等下一批</span><strong id="kpi-waiting">--</strong></article>
+        <article class="metric"><span>保住接驳船</span><strong id="kpi-vessel">--</strong></article>
+        <article class="metric"><span>新增滞港费(元)</span><strong id="kpi-fee">--</strong></article>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>排程输入</h2>
+          <span class="hint">可粘贴 containers / shifts JSON；留空请求使用内置样例</span>
+        </div>
+        <textarea id="payload-json" class="json-input" spellcheck="false"
+          placeholder='{"containers":[{"container_id":"C1",...}],"shifts":[{"shift_id":"S1","capacity":1}]}'></textarea>
+        <div class="review-actions">
+          <button id="run-json" type="button">按 JSON 排程</button>
+          <button id="fill-sample" type="button">填入样例 JSON</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>闸口班次名额</h2>
+          <span class="hint">已签发/已确认名额锁定；调整名额后自动重排未确认预约</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>班次</th><th>时间</th><th class="num">总名额</th><th class="num">已占/已发</th><th class="num">剩余</th><th>名额调整</th></tr>
+            </thead>
+            <tbody id="shift-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>提箱预约建议</h2>
+          <span class="hint" id="plan-hint">规则：同一班最后名额先保船期；船数与箱数相同则费用最低</span>
+        </div>
+        <div class="table-wrap appt-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>箱号</th><th>建议班次</th><th>状态</th><th>接驳船期</th>
+                <th class="num">新增滞港费</th><th>原因</th><th>车队签发/确认</th>
+              </tr>
+            </thead>
+            <tbody id="appointment-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel appt-rules">
+        <div class="panel-head"><h2>并发与重试</h2></div>
+        <p>确认在 SQLite 事务内使用 <code>BEGIN IMMEDIATE</code> 校验剩余名额；同一预约或同一 <code>Idempotency-Key</code> 重试只返回/恢复原占位，不会新增第二条占位记录。</p>
+        <label class="simulate"><input type="checkbox" id="simulate-failure"> 下一次签发模拟失败（随后可点原按钮重试）</label>
+      </section>
+    </main>
+
+    <footer class="statusbar">
+      <span id="notice" class="notice" role="status"></span>
+      <span id="state-status">尚未排程</span>
+      <span>appointments · gate capacity</span>
+    </footer>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='appointments.js') }}"></script>
+</body>
+</html>

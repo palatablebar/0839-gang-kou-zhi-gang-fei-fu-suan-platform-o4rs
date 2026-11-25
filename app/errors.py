@@ -1,6 +1,3 @@
-from flask import jsonify
-
-
 MESSAGES = {
     "EMPTY_FILE": "文件为空",
     "BLANK_FILE": "文件只有空白",
@@ -18,6 +15,13 @@ MESSAGES = {
     "GATE_BLOCKED": "存在阻断项，不能签发",
     "NOT_APPROVED": "批次尚未签发",
     "BAD_REQUEST": "请求内容不完整",
+    "APPOINTMENT_NOT_FOUND": "提箱预约不存在",
+    "SHIFT_NOT_FOUND": "闸口班次不存在",
+    "SHIFT_FULL": "该班次名额已满",
+    "IDEMPOTENCY_CONFLICT": "幂等键已用于其他预约",
+    "ISSUE_IN_PROGRESS": "预约正在签发，请勿重复提交",
+    "ISSUANCE_FAILED": "预约签发失败，可使用原预约重试",
+    "CAPACITY_INVALID": "班次名额无效",
 }
 
 
@@ -30,4 +34,5 @@ class DomainIssue(Exception):
 
 
 def error_response(exc: DomainIssue):
+    from flask import jsonify
     return jsonify(error=exc.detail or MESSAGES.get(exc.code, "请求无法处理"), code=exc.code), exc.status
